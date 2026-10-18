@@ -66,7 +66,7 @@ The final project deliverables are as follows:
 
   1. Source codes for the sequential and AVX2 assembly implementations of matrix multiplication
   2. Comparison between the two implementations in terms of execution time and speedup across several dimension sizes
-  3, Discussions on effects of matrix size on time efficiency and the effectiveness of SIMD parallelization in improving computational performance
+  3. Discussions on effects of matrix size on time efficiency and the effectiveness of SIMD parallelization in improving computational performance
   4. Documentation of the program's functionality, implementation process, and group’s thinking process
 
 # Proposed target implementation platform
