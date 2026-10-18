@@ -17,10 +17,10 @@ The program will take in two matrices, A and B, that are populated with single-p
 
 Example input:
 ```text 
-		ENTER MATRIX A ROWS: 2
-		ENTER MATRIX A COLUMNS: 3
-		ENTER MATRIX A ROWS: 3
-		ENTER MATRIX A COLUMNS: 4
+ENTER MATRIX A ROWS: 2
+ENTER MATRIX A COLUMNS: 3
+ENTER MATRIX A ROWS: 3
+ENTER MATRIX A COLUMNS: 4
 ```
 
 ## b. Proposed Process
