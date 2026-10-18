@@ -82,3 +82,6 @@ The final project deliverables are as follows:
 [1] Hassan, S. A., Hemeida, A. M., & Mahmoud, A. A. (2016). Performance evaluation of matrix-matrix multiplications using Intel's advanced vector extensions (AVX). Microprocessors and Microsystems, 47(B), 369–374. https://www.sciencedirect.com/science/article/abs/pii/S0141933116302502
 
 [2] Netlib. (n.d.). BLAS (Basic Linear Algebra Subprograms). https://www.netlib.org/blas/
+
+# Video
+link: https://drive.google.com/file/d/1FepscfdHG1RATPm2HXv3Bl_DxYlRvLnH/view?usp=sharing
