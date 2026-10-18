@@ -1,5 +1,5 @@
 # CEPARCO Integrating Project milestone # 1 (proposal)
-**Group Members**
+**Group 5 Members**
 - Hernaez, Raeka Estrelle
 - Liwanag, Ram Miguel
 - Serrano, Paul Rhazzel
