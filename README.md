@@ -14,7 +14,7 @@
 
 # Proposed Project Description 
 ## a. Input
-The program will take in two matrices, A and B, that are populated with single-precision floating-point values. The user will have to input four different dimension inputs: X rows and Y columns for matrix A, and Y rows and Z columns for matrix B. As it is imperative that the number of columns for matrix A and the number of rows for matrix B are equal, error checking will be implemented to ensure that this is enforced. These values will be used to construct the matrixes, which will then be filled with randomly generated single-precision floating-point values. 
+The program will take in two matrices, A and B, that are populated with single-precision floating-point values. The user will have to input four different dimension inputs: X rows and Y columns for matrix A, and Y rows and Z columns for matrix B. As it is imperative that the number of columns for matrix A and the number of rows for matrix B are equal, error checking will be implemented to ensure that this is enforced. These values will be used to construct the matrices, which will then be filled with randomly generated single-precision floating-point values. 
 
 Example input:
 ```text 
@@ -32,9 +32,9 @@ ENTER MATRIX B COLUMNS: 4
 
 
 ###   ii.  Related Works and Project Differentiation
-  One related work is Performance Evaluation of Matrix-Matrix Multiplications Using Intel’s Advanced Vector Extensions (AVX) by Hassan, Hemeida, and Mahmoud (2016). They studied and tested different programming methods, including inline assembly and intrinsic functions, using C++ compilers. Their results showed that intrinsic functions performed better than inline assembly in their tests, and the intel compiler generally performed better than the Microsoft compiler. This study is related to our project because it also explores the use of vector instructions for matrix multiplication.
+  One related work is Performance Evaluation of Matrix-Matrix Multiplications Using Intel’s Advanced Vector Extensions (AVX) by Hassan, Hemeida, and Mahmoud (2016). They studied and tested different programming methods, including inline assembly and intrinsic functions, using C++ compilers. Their results showed that intrinsic functions performed better than inline assembly in their tests, and the Intel compiler generally performed better than the Microsoft compiler. This study is related to our project because it also explores the use of vector instructions for matrix multiplication.
 
-  Another is the Basic Linear Algebra Subprograms (BLAS) which is a library of routines for performing linear algebra operations, including matrix-matrix multiplication. It is relevant to this project because it provides an established implementation of the same computational process.
+  Another related work is the Basic Linear Algebra Subprograms (BLAS) which is a library of routines for performing linear algebra operations, including matrix-matrix multiplication. It is relevant to this project because it provides an established implementation of the same computational process.
 
   ~~Unlike the related study, which focused on comparing programming methods and compilers for AVX-based matrix multiplication, our project will focus on applying AVX2 assembly to matrix multiplication and examining how it affects execution time compared with a sequential implementation. While BLAS provides general-purpose routines for matrix operations, our project focuses on implementing matrix multiplication AVX2 SIMD assembly and comparing its execution time with a sequential implementation. Our objective is to demonstrate what we have learned about SIMD by implementing matrix multiplication using AVX2 assembly and demonstrating how data level parallelism can be used to perform the computation, rather than to outperform existing libraries or implementations~~
 
@@ -53,10 +53,10 @@ ENTER MATRIX B COLUMNS: 4
 
 
 ###   iv. Processes Not to be Parallelized
-  Supporting operations like matrix element generation, memory allocation, **`input validation`** and execution time measurement will be **`implemented using standard C operations`**. Additionally, **`two`** sequential implementation of the matrix multiplication process with **`different loop orders`** will be used as a basis for comparison **`with the AVX2 assembly implementation`**. As this project is focused on the acceleration of numerical calculations, the group felt that these processes do not necessarily need to be parallelized in the context of the group’s project. 
+  Supporting operations like matrix element generation, memory allocation, **`input validation`** and execution time measurement will be **`implemented using standard C operations`**. **`Additionally, two sequential implementations of the matrix multiplication process, using different loop orders, will serve as the basis for comparison with the AVX2 assembly implementation.`** As this project is focused on the acceleration of numerical calculations, these supporting operations do not need to be parallelized in the context of the this project. 
 
 ## c. Expected Output
-The program will produce the matrix results after multiplying Matrix A and Matrix B, along with the performance analysis when comparing the **`two`** sequential implementation and the AVX2 SIMD assembly implementation. The output matrix will contain single-precision floating-point values calculated from the two input matrices. The program will also display the execution time of **`all three`** implementations to quantify the performance improvement from SIMD parallelization. It will calculate the speedup ratio by dividing the sequential execution time **`of each sequential implementation`** by the AVX2 execution time. These measurements will be gathered across different matrix sizes to be able to observe how the size of the input matrices affects the performance of the program. Likewise, the program will verify whether the results produced by **`all three`** implementations are equal within an acceptable floating-point tolerance, making sure that the AVX2 implementation will produce correct results while improving computational performance.
+**`The program will produce the matrix results after multiplying Matrix A and Matrix B, along with a performance analysis comparing the two sequential implementations with the AVX2 SIMD assembly implementation.`** The output matrix will contain single-precision floating-point values calculated from the two input matrices. The program will also display the execution time of **`all three`** implementations to quantify the performance improvement from SIMD parallelization. It will calculate the speedup ratio by dividing the sequential execution time **`of each sequential implementation`** by the AVX2 execution time. These measurements will be gathered across different matrix sizes to be able to observe how the size of the input matrices affects the performance of the program. Likewise, the program will verify whether the results produced by **`all three`** implementations are equal within an acceptable floating-point tolerance, making sure that the AVX2 implementation will produce correct results while improving computational performance.
 
 Example Output:
 
@@ -117,18 +117,21 @@ All results match within the specified floating-point tolerance.
 ```
 The final project deliverables are as follows:
 
-  1. Source codes for **`all`** sequential and AVX2 assembly implementations of matrix multiplication
+  1. **`Source code for the two sequential C implementations and the AVX2 assembly implementation of matrix multiplication.`**
   2. Comparison between the **`three`** implementations in terms of execution time and speedup across several dimension sizes
   3. Discussions on effects of matrix size on time efficiency and the effectiveness of SIMD parallelization in improving computational performance
   4. Documentation of the program's functionality, implementation process, and group’s thinking process
 
 # Proposed target implementation platform
-  This project will be implemented using C with AVX2 assembly to develop **`all`** the sequential and SIMD-based matrix multiplication implementations. The sequential implementation will serve as the baseline for comparison with the AVX2 implementation, which will use SIMD instructions to perform operations on multiple single-precision floating-point values simultaneously
+  ~~This project will be implemented using C with AVX2 assembly to develop **`all`** the sequential and SIMD-based matrix multiplication implementations. The sequential implementation will serve as the baseline for comparison with the AVX2 implementation, which will use SIMD instructions to perform operations on multiple single-precision floating-point values simultaneously~~
+ **`This project will be implemented using C and AVX2 assembly. It will include two sequential C implementations using different loop orders and one SIMD-based AVX2 assembly implementation. The two sequential implementations will serve as baselines for comparison with the AVX2 implementation.`**
 
   The program will be developed and compiled using Visual Studio 2026 where it will also be  run on. The hardware must include a processor that supports the AVX2 instruction set to ensure the implementation can execute correctly. The program will accept compatible matrices as inputs, calculate their product using both implementations, and compare their execution times and numerical values to evaluate the application of data level parallelism
 
 # Mid-project milestones 
-  Before the Week 10 demo, we aim to complete the sequential and AVX2 matrix multiplication implementations, including matrix generation and input validation. We will also implement the result verification and execution time comparisons that will be needed to calculate the speedup. The demo should showcase **`all`** implementations, verify results, and initial performance measurements using different matrix sizes.
+  ~~Before the Week 10 demo, we aim to complete the sequential and AVX2 matrix multiplication implementations, including matrix generation and input validation. We will also implement the result verification and execution time comparisons that will be needed to calculate the speedup. The demo should showcase all implementations, verify results, and initial performance measurements using different matrix sizes.~~
+  
+  **`Before the Week 10 demo, we aim to complete the two sequential C implementations and the AVX2 assembly implementation, including matrix generation and input validation. We will also implement result verification and execution-time comparisons to calculate speedup. The demo should showcase all three implementations, verify their results, and present initial performance measurements using different matrix sizes.`**
 
 # References
 
