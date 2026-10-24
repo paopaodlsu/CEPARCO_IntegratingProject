@@ -58,7 +58,7 @@ ENTER MATRIX B COLUMNS: 4
 ## c. Expected Output
 The program will produce the matrix results after multiplying Matrix A and Matrix B, along with the performance analysis when comparing the **`two`** sequential implementation and the AVX2 SIMD assembly implementation. The output matrix will contain single-precision floating-point values calculated from the two input matrices. The program will also display the execution time of **`all three`** implementations to quantify the performance improvement from SIMD parallelization. It will calculate the speedup ratio by dividing the sequential execution time **`of each sequential implementation`** by the AVX2 execution time. These measurements will be gathered across different matrix sizes to be able to observe how the size of the input matrices affects the performance of the program. Likewise, the program will verify whether the results produced by **`all three`** implementations are equal within an acceptable floating-point tolerance, making sure that the AVX2 implementation will produce correct results while improving computational performance.
 
-~~Example Output:~~
+Example Output:
 
 ~~AVX2 MATRIX MULTIPLICATION~~
 
