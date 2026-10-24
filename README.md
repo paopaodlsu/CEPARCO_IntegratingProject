@@ -143,4 +143,5 @@ The final project deliverables are as follows:
 
 # Pitch Video
 [NEW Pitch Video](https://drive.google.com/file/d/1NxirzcALNeDLY3DhmaFLK_0ZPvq0-pyE/view?usp=sharing)
+
 [old Pitch Video](https://drive.google.com/file/d/1FepscfdHG1RATPm2HXv3Bl_DxYlRvLnH/view?usp=sharing)
