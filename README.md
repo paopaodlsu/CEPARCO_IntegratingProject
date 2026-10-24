@@ -142,6 +142,6 @@ The final project deliverables are as follows:
 [2] Netlib. (n.d.). BLAS (Basic Linear Algebra Subprograms). https://www.netlib.org/blas/
 
 # Pitch Video
-[NEW Pitch Video](https://drive.google.com/file/d/1NxirzcALNeDLY3DhmaFLK_0ZPvq0-pyE/view?usp=sharing)
+## [NEW Pitch Video](https://drive.google.com/file/d/1NxirzcALNeDLY3DhmaFLK_0ZPvq0-pyE/view?usp=sharing)
 
 [old Pitch Video](https://drive.google.com/file/d/1FepscfdHG1RATPm2HXv3Bl_DxYlRvLnH/view?usp=sharing)
