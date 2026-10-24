@@ -5,10 +5,10 @@
 - Serrano, Paul Rhazzel
 - Tiu, Kyle 
 ---
-# Project Title: SIMD-BASED AVX2 MATRIX MULTIPLICATION 
+# Project Title: SIMD-BASED AVX2 MATRIX MULTIPLICATION PERFORMANCE
 
 # Abstract 
-Matrix multiplication is a mathematical operation used in various computing applications. This project aims to develop a program that performs matrix multiplication using AVX2 assembly to demonstrate how multiple data values can be processed at the same time. The program will generate two matrices with compatible dimensions and calculate their product using two approaches, a sequential implementation that processes the calculations one at a time and a parallel implementation using AVX2 assembly, which allows multiple values to be processed in a single instruction. The results of both implementations will be checked for correctness, and their execution times will be measured and compared across different matrix sizes. Through this comparison, the project aims to determine how using SIMD affects the execution time of matrix multiplication as the input size increases.
+Matrix multiplication is a mathematical operation used in various computing applications. This project aims to develop a program that performs matrix multiplication using AVX2 assembly to demonstrate how multiple data values can be processed at the same time. The program will generate two matrices with compatible dimensions and calculate their product using three approaches, two sequential implementations that process the calculations one at a time using different loop orders and a parallel implementation using AVX2 assembly, which allows multiple values to be processed in a single instruction. The results of all three implementations will be checked for correctness, and their execution times will be measured and compared across different matrix sizes. Through this comparison, the project aims to determine how using SIMD affects the execution time of matrix multiplication as the input size increases.
 
 # Proposed Project Description 
 ## a. Input
@@ -18,20 +18,26 @@ Example input:
 ```text 
 ENTER MATRIX A ROWS: 2
 ENTER MATRIX A COLUMNS: 3
-ENTER MATRIX A ROWS: 3
-ENTER MATRIX A COLUMNS: 4
+ENTER MATRIX B ROWS: 3
+ENTER MATRIX B COLUMNS: 4
 ```
 
 ## b. Proposed Process
 ###   i. Processes to be Parallelized
-  The primary processes that will be parallelized is the multiplication of the matrix elements and the subsequent addition of their products using SIMD-based AVX2 assembly. Because the usual implementation of matrix multiplication in programming will have the computation be looped for each element one by one, execution times may take longer depending on the number of elements to be calculated. As such, parallelizing these processes will definitely increase efficiency by allowing multiple data elements to be processed using less instructions 
+  ~~The primary processes that will be parallelized is the multiplication of the matrix elements and the subsequent addition of their products using SIMD-based AVX2 assembly. Because the usual implementation of matrix multiplication in programming will have the computation be looped for each element one by one, execution times may take longer depending on the number of elements to be calculated. As such, parallelizing these processes will definitely increase efficiency by allowing multiple data elements to be processed using less instructions~~
+  
+  **The multiplication and accumulation operations in matrix multiplication will be parallelized using AVX2 SIMD instructions. The implementation will process eight single-precision floating-point values simultaneously using 256-bit YMM registers. By processing multiple values in a single instruction, the program aims to reduce the number of instructions required for the computation. The AVX2 implementation will be compared with two sequential C implementations using different loop orders to evaluate the effects of SIMD parallelism on execution time.**
+
 
 ###   ii.  Related Works and Project Differentiation
   One related work is Performance Evaluation of Matrix-Matrix Multiplications Using Intel’s Advanced Vector Extensions (AVX) by Hassan, Hemeida, and Mahmoud (2016). They studied and tested different programming methods, including inline assembly and intrinsic functions, using C++ compilers. Their results showed that intrinsic functions performed better than inline assembly in their tests, and the intel compiler generally performed better than the Microsoft compiler. This study is related to our project because it also explores the use of vector instructions for matrix multiplication.
 
   Another is the Basic Linear Algebra Subprograms (BLAS) which is a library of routines for performing linear algebra operations, including matrix-matrix multiplication. It is relevant to this project because it provides an established implementation of the same computational process.
 
-  Unlike the related study, which focused on comparing programming methods and compilers for AVX-based matrix multiplication, our project will focus on applying AVX2 assembly to matrix multiplication and examining how it affects execution time compared with a sequential implementation. While BLAS provides general-purpose routines for matrix operations, our project focuses on implementing matrix multiplication AVX2 SIMD assembly and comparing its execution time with a sequential implementation. Our objective is to demonstrate what we have learned about SIMD by implementing matrix multiplication using AVX2 assembly and demonstrating how data level parallelism can be used to perform the computation, rather than to outperform existing libraries or implementations
+  ~~Unlike the related study, which focused on comparing programming methods and compilers for AVX-based matrix multiplication, our project will focus on applying AVX2 assembly to matrix multiplication and examining how it affects execution time compared with a sequential implementation. While BLAS provides general-purpose routines for matrix operations, our project focuses on implementing matrix multiplication AVX2 SIMD assembly and comparing its execution time with a sequential implementation. Our objective is to demonstrate what we have learned about SIMD by implementing matrix multiplication using AVX2 assembly and demonstrating how data level parallelism can be used to perform the computation, rather than to outperform existing libraries or implementations~~
+
+  **Unlike existing implementations of AVX-based matrix multiplication and established libraries such as BLAS, this project will focus on evaluating a specific AVX2 assembly implementation and its performance compared with two sequential C implementations. In addition to measuring execution time across different matrix sizes, the project will examine how loop ordering and memory-access patterns affect performance. The objective is to demonstrate the application of SIMD-based data-level parallelism while analyzing its performance benefits and limitations, rather than to develop a new matrix multiplication algorithm or outperform optimized libraries**
+
 
 ###   iii. Parallelization Approach
   To parallelize the processes, the group plans to use packed symmetric operations such as VADDPS and VMULPS to speed up the computational portion of the program. A sequential implementation of matrix multiplication will be made in the main caller program using typical nested loops and basic addition and multiplication operations. This program will serve as a benchmark to test the parallelized program against, as both implementations will be measured for their execution time and how much faster one is compared to the other. Comparisons and observations will be made on how each implementation deals with increasing dimension sizes and in what areas one program trumps the other.  
