@@ -1,11 +1,11 @@
-# CEPARCO Integrating Project milestone # 1 (proposal)
+# CEPARCO Integrating Project milestone # 1 (proposal / revised proposal)
 **Group 5 Members**
 - Hernaez, Raeka Estrelle
 - Liwanag, Ram Miguel
 - Serrano, Paul Rhazzel
 - Tiu, Kyle 
 ---
-# Project Title: SIMD-BASED AVX2 MATRIX MULTIPLICATION PERFORMANCE
+# Project Title: SIMD-BASED AVX2 MATRIX MULTIPLICATION **`PERFORMANCE`**
 
 # Abstract 
 Matrix multiplication is a mathematical operation used in various computing applications. This project aims to develop a program that performs matrix multiplication using AVX2 assembly to demonstrate how multiple data values can be processed at the same time. The program will generate two matrices with compatible dimensions and calculate their product using three approaches, two sequential implementations that process the calculations one at a time using different loop orders and a parallel implementation using AVX2 assembly, which allows multiple values to be processed in a single instruction. The results of all three implementations will be checked for correctness, and their execution times will be measured and compared across different matrix sizes. Through this comparison, the project aims to determine how using SIMD affects the execution time of matrix multiplication as the input size increases.
