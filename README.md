@@ -117,18 +117,18 @@ All results match within the specified floating-point tolerance.
 ```
 The final project deliverables are as follows:
 
-  1. Source codes for the sequential and AVX2 assembly implementations of matrix multiplication
+  1. Source codes for **`all`** sequential and AVX2 assembly implementations of matrix multiplication
   2. Comparison between the **`three`** implementations in terms of execution time and speedup across several dimension sizes
   3. Discussions on effects of matrix size on time efficiency and the effectiveness of SIMD parallelization in improving computational performance
   4. Documentation of the program's functionality, implementation process, and group’s thinking process
 
 # Proposed target implementation platform
-  This project will be implemented using C with AVX2 assembly to develop both the sequential and SIMD-based matrix multiplication implementations. The sequential implementation will serve as the baseline for comparison with the AVX2 implementation, which will use SIMD instructions to perform operations on multiple single-precision floating-point values simultaneously
+  This project will be implemented using C with AVX2 assembly to develop **`all`** the sequential and SIMD-based matrix multiplication implementations. The sequential implementation will serve as the baseline for comparison with the AVX2 implementation, which will use SIMD instructions to perform operations on multiple single-precision floating-point values simultaneously
 
   The program will be developed and compiled using Visual Studio 2026 where it will also be  run on. The hardware must include a processor that supports the AVX2 instruction set to ensure the implementation can execute correctly. The program will accept compatible matrices as inputs, calculate their product using both implementations, and compare their execution times and numerical values to evaluate the application of data level parallelism
 
 # Mid-project milestones 
-  Before the Week 10 demo, we aim to complete the sequential and AVX2 matrix multiplication implementations, including matrix generation and input validation. We will also implement the result verification and execution time comparisons that will be needed to calculate the speedup. The demo should showcase both implementations, verify results, and initial performance measurements using different matrix sizes.
+  Before the Week 10 demo, we aim to complete the sequential and AVX2 matrix multiplication implementations, including matrix generation and input validation. We will also implement the result verification and execution time comparisons that will be needed to calculate the speedup. The demo should showcase **`all`** implementations, verify results, and initial performance measurements using different matrix sizes.
 
 # References
 
