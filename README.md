@@ -58,25 +58,62 @@ ENTER MATRIX B COLUMNS: 4
 ## c. Expected Output
 The program will produce the matrix results after multiplying Matrix A and Matrix B, along with the performance analysis when comparing the **`two`** sequential implementation and the AVX2 SIMD assembly implementation. The output matrix will contain single-precision floating-point values calculated from the two input matrices. The program will also display the execution time of **`all three`** implementations to quantify the performance improvement from SIMD parallelization. It will calculate the speedup ratio by dividing the sequential execution time **`of each sequential implementation`** by the AVX2 execution time. These measurements will be gathered across different matrix sizes to be able to observe how the size of the input matrices affects the performance of the program. Likewise, the program will verify whether the results produced by **`all three`** implementations are equal within an acceptable floating-point tolerance, making sure that the AVX2 implementation will produce correct results while improving computational performance.
 
-Example Output: 
-```text
-AVX2 MATRIX MULTIPLICATION
+~~Example Output:~~
 
-Matrix A Dimensions: 2 x 3 
-GENERATED MATRIX DISPLAYED HERE
+~~AVX2 MATRIX MULTIPLICATION~~
 
-Matrix B Dimensions: 3 x 4 
-GENERATED MATRIX DISPLAYED HERE
+~~Matrix A Dimensions: 2 x 3~~
+~~GENERATED MATRIX DISPLAYED HERE~~
 
-Resulting Matrix C (A x B):
-RESULTING MATRIX DISPLAYED HERE
+~~Matrix B Dimensions: 3 x 4~~ 
+~~GENERATED MATRIX DISPLAYED HERE~~
 
-PERFORMANCE COMPARISON
+~~Resulting Matrix C (A x B):~~
+~~RESULTING MATRIX DISPLAYED HERE~~
+
+~~PERFORMANCE COMPARISON
 Sequential Execution Time: 0.020 ms
 AVX2 Execution Time: 0.015ms  
-Speedup: 1.33x
+Speedup: 1.33x~~
 
-Result Verification: PASSED (Show passed or failed to check for errors on the output calculations and tolerance.)
+~~Result Verification: PASSED (Show passed or failed to check for errors on the output calculations and tolerance.)~~
+```
+AVX2 MATRIX MULTIPLICATION PERFORMANCE
+
+INPUT MATRICES
+
+Matrix A Dimensions: 2 x 3
+Matrix A:
+[ 1.0  2.0  3.0 ]
+[ 4.0  5.0  6.0 ]
+
+Matrix B Dimensions: 3 x 4
+Matrix B:
+[  7.0   8.0   9.0  10.0 ]
+[ 11.0  12.0  13.0  14.0 ]
+[ 15.0  16.0  17.0  18.0 ]
+
+RESULTING MATRIX C (A x B)
+
+[  74.0   80.0   86.0   92.0 ]
+[ 173.0  188.0  203.0  218.0 ]
+
+PERFORMANCE COMPARISON
+
+Sequential i-j-k Execution Time:  0.020 ms
+Sequential i-k-j Execution Time:  0.016 ms
+AVX2 Assembly Execution Time:     0.010 ms
+
+AVX2 Speedup vs. Sequential i-j-k: 2.00x
+AVX2 Speedup vs. Sequential i-k-j: 1.60x
+
+CORRECTNESS VERIFICATION
+
+Sequential i-j-k vs. Sequential i-k-j: PASSED
+Sequential i-j-k vs. AVX2 Assembly:    PASSED
+Sequential i-k-j vs. AVX2 Assembly:    PASSED
+
+All results match within the specified floating-point tolerance.
 ```
 The final project deliverables are as follows:
 
