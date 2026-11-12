@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="CEPARCO_IntegratingProject/CEPARCO_IntegratingProject.vcxproj" />
+  <Project Path="CEPARCO_IntegratingProject/CEPARCO_IntegratingProject.vcxproj" Id="5a43f59e-3b91-4072-a128-8d9b2c0865b2" />
 </Solution>
