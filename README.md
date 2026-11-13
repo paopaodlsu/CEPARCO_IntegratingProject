@@ -1,9 +1,34 @@
-# CEPARCO Integrating Project milestone # 1 (proposal / revised proposal)
+# CEPARCO Integrating Project milestone # 2 (Mid-Milestone)
 **Group 5 Members**
 - Hernaez, Raeka Estrelle
 - Liwanag, Ram Miguel
 - Serrano, Paul Rhazzel
 - Tiu, Kyle 
+---
+## Things to keep in mind for the final milestone
+- With smaller matrix sizes (ex. input of 2, 3, 3, 4) The Sequential implementations run significantly faster than the AVX2 implementation, but larger matrix sizes (ex. input of 512, 512, 512, 512) The AVX2 runs significantly faster than the Sequential implementations.
+
+## Updates:
+- Completed the Sequential C and AVX2 matrix multiplication implementations
+- Included in the completed implementation (as mentioned in the proposal):
+  - Matrix Generation
+  - Input Validation
+  - Result Verification and Execution time comparisons with calculated speedup
+
+## Additions / Changes
+- Added a loop that lets users run another matrix multiplication or exit after each run
+- Truncated large matrix displays to show values from the beginning and end of each matrix
+- Added input validation for each dimension and the restart choice
+
+## AHA moments
+- AVX2 is not necessarily faster for small matrices because setup and loop overhead can outweigh the benefit of processing eight values at once
+- Performance can change as matrix dimensions grow
+
+## AI Declaration
+ChatGPT and Claude was used to with project development and debugging and to develop test cases.
+
+---
+# CEPARCO Integrating Project milestone # 1 (proposal / revised proposal)
 ---
 # Project Title: SIMD-BASED AVX2 MATRIX MULTIPLICATION **`PERFORMANCE`**
 
