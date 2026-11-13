@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-static int multiplication_arguments_are_valid(
+static int multiplicationArgumentsAreValid(
     const Matrix *a,
     const Matrix *b,
     const Matrix *c
@@ -15,13 +15,13 @@ static int multiplication_arguments_are_valid(
            c->cols == b->cols;
 }
 
-void matrix_multiply_ijk(const Matrix *a, const Matrix *b, Matrix *c)
+void matrixMultiplyIjk(const Matrix *a, const Matrix *b, Matrix *c)
 {
     size_t i;
     size_t j;
     size_t k;
 
-    if (!multiplication_arguments_are_valid(a, b, c)) {
+    if (!multiplicationArgumentsAreValid(a, b, c)) {
         return;
     }
 
@@ -37,13 +37,13 @@ void matrix_multiply_ijk(const Matrix *a, const Matrix *b, Matrix *c)
     }
 }
 
-void matrix_multiply_ikj(const Matrix *a, const Matrix *b, Matrix *c)
+void matrixMultiplyIkj(const Matrix *a, const Matrix *b, Matrix *c)
 {
     size_t i;
     size_t j;
     size_t k;
 
-    if (!multiplication_arguments_are_valid(a, b, c)) {
+    if (!multiplicationArgumentsAreValid(a, b, c)) {
         return;
     }
 
@@ -55,23 +55,23 @@ void matrix_multiply_ikj(const Matrix *a, const Matrix *b, Matrix *c)
 
     for (i = 0; i < a->rows; ++i) {
         for (k = 0; k < a->cols; ++k) {
-            float a_value = a->data[i * a->cols + k];
+            float aValue = a->data[i * a->cols + k];
             for (j = 0; j < b->cols; ++j) {
                 c->data[i * c->cols + j] +=
-                    a_value * b->data[k * b->cols + j];
+                    aValue * b->data[k * b->cols + j];
             }
         }
     }
 }
 
-int matrix_equal_tolerance(
+int matrixEqualTolerance(
     const Matrix *left,
     const Matrix *right,
     float tolerance
 )
 {
     size_t i;
-    size_t element_count;
+    size_t elementCount;
 
     if (left == NULL || right == NULL ||
         left->data == NULL || right->data == NULL ||
@@ -80,8 +80,8 @@ int matrix_equal_tolerance(
         return 0;
     }
 
-    element_count = left->rows * left->cols;
-    for (i = 0; i < element_count; ++i) {
+    elementCount = left->rows * left->cols;
+    for (i = 0; i < elementCount; ++i) {
         if (!(fabsf(left->data[i] - right->data[i]) <= tolerance)) {
             return 0;
         }

@@ -1,12 +1,20 @@
 #include "matrix.h"
 
+#include <windows.h>
+
+#include <ctype.h>
+#include <errno.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
-#define MULTIPLICATION_REPETITIONS 10
-#define MINIMUM_TIMING_SECONDS 0.01
-#define CORRECTNESS_TOLERANCE 1.0e-4f
+#define multiplicationRepetitions 10
+#define maxRepetitionsPerTimingBatch 10000000
+#define minimumTimingSeconds 0.01
+#define correctnessTolerance 1.0e-4f
+#define inputBufferSize 128
 
 typedef void (*MatrixMultiplyFunction)(
     const Matrix *a,
@@ -14,171 +22,361 @@ typedef void (*MatrixMultiplyFunction)(
     Matrix *c
 );
 
-static int read_dimension(const char *prompt, size_t *value)
+enum {
+    sessionError = -1,
+    sessionEof = 0,
+    sessionComplete = 1
+};
+
+static int readInputLine(const char *prompt, char *buffer, size_t capacity)
 {
-    printf("%s", prompt);
-    if (scanf("%zu", value) != 1 || *value == 0) {
-        fprintf(stderr, "Invalid dimension. Enter a positive whole number.\n");
+    size_t length;
+    int ch;
+
+    fputs(prompt, stdout);
+    fflush(stdout);
+
+    if (fgets(buffer, (int)capacity, stdin) == NULL) {
         return 0;
+    }
+
+    length = strlen(buffer);
+    if (length > 0 && buffer[length - 1] == '\n') {
+        buffer[length - 1] = '\0';
+        return 1;
+    }
+
+    if (!feof(stdin)) {
+        while ((ch = getchar()) != '\n' && ch != EOF) {
+        }
+        return -1;
     }
 
     return 1;
 }
 
-static double average_multiplication_time(
+static int readDimension(const char *prompt, size_t *value)
+{
+    char input[inputBufferSize];
+    char *start;
+    char *end;
+    unsigned long long parsedValue;
+    int inputStatus;
+
+    for (;;) {
+        inputStatus = readInputLine(prompt, input, sizeof(input));
+        if (inputStatus == 0) {
+            return 0;
+        }
+        if (inputStatus < 0) {
+            puts("Input is too long. Enter one positive whole number.");
+            continue;
+        }
+
+        start = input;
+        while (isspace((unsigned char)*start)) {
+            ++start;
+        }
+
+        if (*start == '-') {
+            puts("Invalid dimension. Enter a positive whole number.");
+            continue;
+        }
+
+        errno = 0;
+        parsedValue = strtoull(start, &end, 10);
+        if (start == end || errno == ERANGE) {
+            puts("Invalid dimension. Enter a positive whole number.");
+            continue;
+        }
+
+        while (isspace((unsigned char)*end)) {
+            ++end;
+        }
+
+        if (*end != '\0' || parsedValue == 0 ||
+            parsedValue > (unsigned long long)SIZE_MAX) {
+            puts("Invalid dimension. Enter a positive whole number.");
+            continue;
+        }
+
+        *value = (size_t)parsedValue;
+        return 1;
+    }
+}
+
+static int readCompatibleBRows(size_t aCols, size_t *bRows)
+{
+    for (;;) {
+        if (!readDimension("ENTER MATRIX B ROWS: ", bRows)) {
+            return 0;
+        }
+
+        if (*bRows == aCols) {
+            return 1;
+        }
+
+        printf("Matrix B rows must equal Matrix A columns (%zu). "
+               "Please re-enter Matrix B rows.\n", aCols);
+    }
+}
+
+static int askRestart(int *restart)
+{
+    char input[inputBufferSize];
+    char *choice;
+    int inputStatus;
+
+    for (;;) {
+        inputStatus = readInputLine(
+            "\nWould you like to re-enter dimensions and run again? "
+            "(Y=restart, N=exit): ",
+            input, sizeof(input));
+        if (inputStatus == 0) {
+            return 0;
+        }
+        if (inputStatus < 0) {
+            puts("Please enter Y to restart or N to exit.");
+            continue;
+        }
+
+        choice = input;
+        while (isspace((unsigned char)*choice)) {
+            ++choice;
+        }
+
+        if ((*choice == 'Y' || *choice == 'y') && choice[1] == '\0') {
+            *restart = 1;
+            return 1;
+        }
+        if ((*choice == 'N' || *choice == 'n') && choice[1] == '\0') {
+            *restart = 0;
+            return 1;
+        }
+
+        puts("Please enter Y to restart or N to exit.");
+    }
+}
+
+static double averageMultiplicationTime(
     MatrixMultiplyFunction multiply,
     const Matrix *a,
     const Matrix *b,
-    Matrix *c
+    Matrix *c,
+    const LARGE_INTEGER *frequency
 )
 {
-    clock_t start;
-    clock_t end;
-    size_t repetition_count = 0;
-    int repetition;
+    LARGE_INTEGER start;
+    LARGE_INTEGER end;
+    size_t batchRepetitions = multiplicationRepetitions;
+    size_t repetitionCount = 0;
+    size_t repetition;
+    double elapsedSeconds;
+    double estimatedTotalRepetitions;
+    double estimatedRemainingRepetitions;
 
-    start = clock();
-    if (start == (clock_t)-1) {
+    if (frequency == NULL || frequency->QuadPart <= 0 ||
+        !QueryPerformanceCounter(&start)) {
         return -1.0;
     }
 
-    do {
-        for (repetition = 0;
-             repetition < MULTIPLICATION_REPETITIONS;
-             ++repetition) {
-            multiply(a, b, c);
-        }
-
-        repetition_count += MULTIPLICATION_REPETITIONS;
-        end = clock();
-        if (end == (clock_t)-1) {
+    for (;;) {
+        if (batchRepetitions > SIZE_MAX - repetitionCount) {
             return -1.0;
         }
-    } while ((double)(end - start) / (double)CLOCKS_PER_SEC <
-             MINIMUM_TIMING_SECONDS);
 
-    return (double)(end - start) /
-           (double)CLOCKS_PER_SEC /
-           (double)repetition_count;
+        for (repetition = 0; repetition < batchRepetitions; ++repetition) {
+            multiply(a, b, c);
+        }
+        repetitionCount += batchRepetitions;
+
+        if (!QueryPerformanceCounter(&end)) {
+            return -1.0;
+        }
+
+        elapsedSeconds = (double)(end.QuadPart - start.QuadPart) /
+                          (double)frequency->QuadPart;
+        if (elapsedSeconds >= minimumTimingSeconds) {
+            break;
+        }
+
+        if (elapsedSeconds <= 0.0) {
+            if (batchRepetitions >= maxRepetitionsPerTimingBatch) {
+                return -1.0;
+            }
+            if (batchRepetitions > maxRepetitionsPerTimingBatch / 2) {
+                batchRepetitions = maxRepetitionsPerTimingBatch;
+            } else {
+                batchRepetitions *= 2;
+            }
+        } else {
+            estimatedTotalRepetitions =
+                (double)repetitionCount * minimumTimingSeconds /
+                elapsedSeconds;
+            estimatedRemainingRepetitions =
+                estimatedTotalRepetitions - (double)repetitionCount;
+
+            if (estimatedRemainingRepetitions >=
+                (double)maxRepetitionsPerTimingBatch) {
+                batchRepetitions = maxRepetitionsPerTimingBatch;
+            } else if (estimatedRemainingRepetitions <
+                       (double)multiplicationRepetitions) {
+                batchRepetitions = multiplicationRepetitions;
+            } else {
+                batchRepetitions =
+                    (size_t)estimatedRemainingRepetitions + 1;
+            }
+        }
+    }
+
+    return elapsedSeconds / (double)repetitionCount;
 }
 
-static void print_speedup(const char *baseline_name,
-                          double baseline_seconds,
-                          double avx2_seconds)
+static void printSpeedup(const char *baselineName,
+                          double baselineSeconds,
+                          double avx2Seconds)
 {
-    if (baseline_seconds > 0.0 && avx2_seconds > 0.0) {
+    if (baselineSeconds > 0.0 && avx2Seconds > 0.0) {
         printf("AVX2 Speedup vs. %s: %.2fx\n",
-               baseline_name, baseline_seconds / avx2_seconds);
+               baselineName, baselineSeconds / avx2Seconds);
     } else {
         printf("AVX2 Speedup vs. %s: unavailable (timer resolution)\n",
-               baseline_name);
+               baselineName);
     }
 }
 
-int main(void)
+static int runMatrixSession(void)
 {
     Matrix a = {0};
     Matrix b = {0};
-    Matrix c_ijk = {0};
-    Matrix c_ikj = {0};
-    Matrix c_avx2 = {0};
-    size_t a_rows;
-    size_t a_cols;
-    size_t b_rows;
-    size_t b_cols;
-    double ijk_seconds;
-    double ikj_seconds;
-    double avx2_seconds;
-    int results_match;
-    int exit_code = 1;
+    Matrix cIjk = {0};
+    Matrix cIkj = {0};
+    Matrix cAvx2 = {0};
+    size_t aRows;
+    size_t aCols;
+    size_t bRows;
+    size_t bCols;
+    double ijkSeconds;
+    double ikjSeconds;
+    double avx2Seconds;
+    LARGE_INTEGER timerFrequency;
+    int resultsMatch;
+    int sessionStatus = sessionError;
 
-    printf("AVX2 MATRIX MULTIPLICATION PERFORMANCE\n\n");
-
-    if (!read_dimension("ENTER MATRIX A ROWS: ", &a_rows) ||
-        !read_dimension("ENTER MATRIX A COLUMNS: ", &a_cols) ||
-        !read_dimension("ENTER MATRIX B ROWS: ", &b_rows) ||
-        !read_dimension("ENTER MATRIX B COLUMNS: ", &b_cols)) {
+    if (!QueryPerformanceFrequency(&timerFrequency) ||
+        timerFrequency.QuadPart <= 0) {
+        fprintf(stderr, "Unable to initialize the performance counter.\n");
         goto cleanup;
     }
 
-    if (a_cols != b_rows) {
-        fprintf(stderr,
-                "Incompatible dimensions: Matrix A columns must equal "
-                "Matrix B rows.\n");
+    printf("\nGROUP 5's AVX2 MATRIX MULTIPLICATION PERFORMANCE\n\n");
+
+    if (!readDimension("ENTER MATRIX A ROWS: ", &aRows) ||
+        !readDimension("ENTER MATRIX A COLUMNS: ", &aCols) ||
+        !readCompatibleBRows(aCols, &bRows) ||
+        !readDimension("ENTER MATRIX B COLUMNS: ", &bCols)) {
+        sessionStatus = sessionEof;
         goto cleanup;
     }
 
-    if (!matrix_create(&a, a_rows, a_cols) ||
-        !matrix_create(&b, b_rows, b_cols) ||
-        !matrix_create(&c_ijk, a_rows, b_cols) ||
-        !matrix_create(&c_ikj, a_rows, b_cols) ||
-        !matrix_create(&c_avx2, a_rows, b_cols)) {
+    if (!matrixCreate(&a, aRows, aCols) ||
+        !matrixCreate(&b, bRows, bCols) ||
+        !matrixCreate(&cIjk, aRows, bCols) ||
+        !matrixCreate(&cIkj, aRows, bCols) ||
+        !matrixCreate(&cAvx2, aRows, bCols)) {
         fprintf(stderr, "Unable to allocate the requested matrices.\n");
         goto cleanup;
     }
 
-    srand((unsigned int)time(NULL));
-    matrix_fill_random(&a);
-    matrix_fill_random(&b);
+    matrixFillRandom(&a);
+    matrixFillRandom(&b);
 
     printf("\nINPUT MATRICES\n\n");
-    matrix_print("Matrix A", &a);
-    matrix_print("Matrix B", &b);
+    matrixPrint("Matrix A", &a);
+    matrixPrint("Matrix B", &b);
 
-    ijk_seconds = average_multiplication_time(
-        matrix_multiply_ijk, &a, &b, &c_ijk);
-    ikj_seconds = average_multiplication_time(
-        matrix_multiply_ikj, &a, &b, &c_ikj);
-    avx2_seconds = average_multiplication_time(
-        matrix_multiply_avx2, &a, &b, &c_avx2);
+    ijkSeconds = averageMultiplicationTime(
+        matrixMultiplyIjk, &a, &b, &cIjk, &timerFrequency);
+    ikjSeconds = averageMultiplicationTime(
+        matrixMultiplyIkj, &a, &b, &cIkj, &timerFrequency);
+    avx2Seconds = averageMultiplicationTime(
+        matrixMultiplyAvx2, &a, &b, &cAvx2, &timerFrequency);
 
-    if (ijk_seconds < 0.0 || ikj_seconds < 0.0 || avx2_seconds < 0.0) {
-        fprintf(stderr, "The C clock() function failed.\n");
+    if (ijkSeconds < 0.0 || ikjSeconds < 0.0 || avx2Seconds < 0.0) {
+        fprintf(stderr, "The high-resolution performance counter failed.\n");
         goto cleanup;
     }
 
     printf("\nRESULTING MATRIX C (A x B)\n\n");
-    matrix_print("Matrix C", &c_ijk);
+    matrixPrint("Matrix C", &cIjk);
 
     printf("\nPERFORMANCE COMPARISON\n\n");
     printf("Sequential i-j-k Execution Time: %.6f ms\n",
-           ijk_seconds * 1000.0);
+           ijkSeconds * 1000.0);
     printf("Sequential i-k-j Execution Time: %.6f ms\n",
-           ikj_seconds * 1000.0);
+           ikjSeconds * 1000.0);
     printf("AVX2 Assembly Execution Time:    %.6f ms\n",
-           avx2_seconds * 1000.0);
-    print_speedup("Sequential i-j-k", ijk_seconds, avx2_seconds);
-    print_speedup("Sequential i-k-j", ikj_seconds, avx2_seconds);
+           avx2Seconds * 1000.0);
+    printSpeedup("Sequential i-j-k", ijkSeconds, avx2Seconds);
+    printSpeedup("Sequential i-k-j", ikjSeconds, avx2Seconds);
 
-    results_match =
-        matrix_equal_tolerance(&c_ijk, &c_ikj, CORRECTNESS_TOLERANCE) &&
-        matrix_equal_tolerance(&c_ijk, &c_avx2, CORRECTNESS_TOLERANCE) &&
-        matrix_equal_tolerance(&c_ikj, &c_avx2, CORRECTNESS_TOLERANCE);
+    resultsMatch =
+        matrixEqualTolerance(&cIjk, &cIkj, correctnessTolerance) &&
+        matrixEqualTolerance(&cIjk, &cAvx2, correctnessTolerance) &&
+        matrixEqualTolerance(&cIkj, &cAvx2, correctnessTolerance);
 
     printf("\nCORRECTNESS VERIFICATION\n\n");
     printf("Sequential i-j-k vs. Sequential i-k-j: %s\n",
-           matrix_equal_tolerance(&c_ijk, &c_ikj,
-                                  CORRECTNESS_TOLERANCE) ? "PASSED" : "FAILED");
+           matrixEqualTolerance(&cIjk, &cIkj,
+                                  correctnessTolerance) ? "PASSED" : "FAILED");
     printf("Sequential i-j-k vs. AVX2 Assembly:    %s\n",
-           matrix_equal_tolerance(&c_ijk, &c_avx2,
-                                  CORRECTNESS_TOLERANCE) ? "PASSED" : "FAILED");
+           matrixEqualTolerance(&cIjk, &cAvx2,
+                                  correctnessTolerance) ? "PASSED" : "FAILED");
     printf("Sequential i-k-j vs. AVX2 Assembly:    %s\n",
-           matrix_equal_tolerance(&c_ikj, &c_avx2,
-                                  CORRECTNESS_TOLERANCE) ? "PASSED" : "FAILED");
+           matrixEqualTolerance(&cIkj, &cAvx2,
+                                  correctnessTolerance) ? "PASSED" : "FAILED");
 
-    if (results_match) {
+    if (resultsMatch) {
         printf("\nAll results match within the tolerance %.1e.\n",
-               (double)CORRECTNESS_TOLERANCE);
-        exit_code = 0;
+               (double)correctnessTolerance);
+        sessionStatus = sessionComplete;
     } else {
         fprintf(stderr, "\nOne or more matrix results do not match.\n");
     }
 
 cleanup:
-    matrix_destroy(&c_avx2);
-    matrix_destroy(&c_ikj);
-    matrix_destroy(&c_ijk);
-    matrix_destroy(&b);
-    matrix_destroy(&a);
-    return exit_code;
+    matrixDestroy(&cAvx2);
+    matrixDestroy(&cIkj);
+    matrixDestroy(&cIjk);
+    matrixDestroy(&b);
+    matrixDestroy(&a);
+    return sessionStatus;
 }
+
+int main(void)
+{
+    int restart = 1;
+    int sessionStatus;
+    int exitCode = 0;
+
+    srand((unsigned int)time(NULL));
+
+    while (restart) {
+        sessionStatus = runMatrixSession();
+        if (sessionStatus == sessionEof) {
+            break;
+        }
+        if (sessionStatus == sessionError) {
+            exitCode = 1;
+        } else {
+            exitCode = 0;
+        }
+
+        if (!askRestart(&restart)) {
+            break;
+        }
+    }
+
+    return exitCode;
+}
+

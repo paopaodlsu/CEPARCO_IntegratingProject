@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int matrix_create(Matrix *matrix, size_t rows, size_t cols)
+int matrixCreate(Matrix *matrix, size_t rows, size_t cols)
 {
-    size_t element_count;
+    size_t elementCount;
     float *data;
 
     if (matrix == NULL || rows == 0 || cols == 0) {
@@ -17,12 +17,12 @@ int matrix_create(Matrix *matrix, size_t rows, size_t cols)
         return 0;
     }
 
-    element_count = rows * cols;
-    if (element_count > SIZE_MAX / sizeof(*data)) {
+    elementCount = rows * cols;
+    if (elementCount > SIZE_MAX / sizeof(*data)) {
         return 0;
     }
 
-    data = (float *)malloc(element_count * sizeof(*data));
+    data = (float *)malloc(elementCount * sizeof(*data));
     if (data == NULL) {
         return 0;
     }
@@ -33,7 +33,7 @@ int matrix_create(Matrix *matrix, size_t rows, size_t cols)
     return 1;
 }
 
-void matrix_destroy(Matrix *matrix)
+void matrixDestroy(Matrix *matrix)
 {
     if (matrix == NULL) {
         return;
@@ -45,29 +45,29 @@ void matrix_destroy(Matrix *matrix)
     matrix->data = NULL;
 }
 
-void matrix_fill_random(Matrix *matrix)
+void matrixFillRandom(Matrix *matrix)
 {
     size_t i;
-    size_t element_count;
+    size_t elementCount;
 
     if (matrix == NULL || matrix->data == NULL) {
         return;
     }
 
-    element_count = matrix->rows * matrix->cols;
-    for (i = 0; i < element_count; ++i) {
+    elementCount = matrix->rows * matrix->cols;
+    for (i = 0; i < elementCount; ++i) {
         matrix->data[i] = (float)rand() / (float)RAND_MAX;
     }
 }
 
-void matrix_print(const char *label, const Matrix *matrix)
+void matrixPrint(const char *label, const Matrix *matrix)
 {
-    size_t row_slot;
-    size_t col_slot;
+    size_t rowSlot;
+    size_t colSlot;
     size_t row;
     size_t col;
-    size_t displayed_rows;
-    size_t displayed_cols;
+    size_t displayedRows;
+    size_t displayedCols;
 
     if (matrix == NULL || matrix->data == NULL) {
         printf("%s: unavailable\n", label != NULL ? label : "Matrix");
@@ -77,30 +77,30 @@ void matrix_print(const char *label, const Matrix *matrix)
     printf("%s (%zu x %zu):\n", label != NULL ? label : "Matrix",
            matrix->rows, matrix->cols);
 
-    displayed_rows = matrix->rows > 6 ? 6 : matrix->rows;
-    displayed_cols = matrix->cols > 6 ? 6 : matrix->cols;
+    displayedRows = matrix->rows > 6 ? 6 : matrix->rows;
+    displayedCols = matrix->cols > 6 ? 6 : matrix->cols;
 
-    for (row_slot = 0; row_slot < displayed_rows; ++row_slot) {
-        if (matrix->rows > 6 && row_slot == 3) {
+    for (rowSlot = 0; rowSlot < displayedRows; ++rowSlot) {
+        if (matrix->rows > 6 && rowSlot == 3) {
             printf("[ ... ]\n");
         }
 
-        if (matrix->rows > 6 && row_slot >= 3) {
-            row = matrix->rows - (6 - row_slot);
+        if (matrix->rows > 6 && rowSlot >= 3) {
+            row = matrix->rows - (6 - rowSlot);
         } else {
-            row = row_slot;
+            row = rowSlot;
         }
 
         printf("[");
-        for (col_slot = 0; col_slot < displayed_cols; ++col_slot) {
-            if (matrix->cols > 6 && col_slot == 3) {
+        for (colSlot = 0; colSlot < displayedCols; ++colSlot) {
+            if (matrix->cols > 6 && colSlot == 3) {
                 printf(" %8s", "...");
             }
 
-            if (matrix->cols > 6 && col_slot >= 3) {
-                col = matrix->cols - (6 - col_slot);
+            if (matrix->cols > 6 && colSlot >= 3) {
+                col = matrix->cols - (6 - colSlot);
             } else {
-                col = col_slot;
+                col = colSlot;
             }
 
             printf(" %8.3f", matrix->data[row * matrix->cols + col]);
