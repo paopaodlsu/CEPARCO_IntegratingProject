@@ -26,6 +26,8 @@
 ## Program Output and Performance Results
 The following outputs demonstrate the current functionality of the program and show the performance differences between the implementations using different matrix sizes.
 
+<br>
+
 ### Small Matrix Test (2 × 3 and 3 × 4)
 AVX2 is slower than the sequential implementations when processing smaller matrices.
 
