@@ -51,6 +51,10 @@ AVX2 performs faster than both sequential implementations when processing larger
 ## AI Declaration
 ChatGPT and Claude were used to assist with project development, debugging, and the development of test cases.
 
+<br>
+<br>
+<br>
+
 ***
 # CEPARCO Integrating Project milestone # 1 (proposal / revised proposal)
 # Project Title: SIMD-BASED AVX2 MATRIX MULTIPLICATION **`PERFORMANCE`**
