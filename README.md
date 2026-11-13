@@ -39,15 +39,18 @@ AVX2 performs faster than both sequential implementations when processing larger
 - AVX2 is not necessarily faster for small matrices because setup and loop overhead can outweigh the benefit of processing eight values at once
 - Performance can change as matrix dimensions grow
 
+---
 ## Remaining Work for the Final Milestone
 - Conduct additional performance tests using different matrix dimensions
 - Complete the performance comparisons and speedup measurements
 - Further examine how matrix size and loop ordering affect execution time
 - Finalize the discussion of the results and document the implementation process
 
+---
 ## Mid-Milestone Video
 [insert link here]
 
+---
 ## AI Declaration
 ChatGPT and Claude were used to assist with project development, debugging, and the development of test cases.
 
