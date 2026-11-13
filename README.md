@@ -7,7 +7,8 @@
 ---
 ## Things to keep in mind for the final milestone
 - With smaller matrix sizes (ex. input of 2, 3, 3, 4) The Sequential implementations run significantly faster than the AVX2 implementation, but larger matrix sizes (ex. input of 512, 512, 512, 512) The AVX2 runs significantly faster than the Sequential implementations.
-
+  
+---
 ## Updates:
 - Completed the Sequential C and AVX2 matrix multiplication implementations
 - Included in the completed implementation (as mentioned in the proposal):
@@ -15,11 +16,13 @@
   - Input Validation
   - Result Verification and Execution time comparisons with calculated speedup
 
+---
 ## Additions / Changes
 - Added a loop that lets users run another matrix multiplication or exit after each run
 - Modified the matrix display for larger inputs to show only the first and last few rows and columns
 - Added input validation for each dimension and the restart choice
 
+---
 ## Program Output and Performance Results
 The following outputs demonstrate the current functionality of the program and show the performance differences between the implementations using different matrix sizes.
 
