@@ -53,7 +53,7 @@ AVX2 performs faster than both sequential implementations when processing larger
 
 ---
 ## Mid-Milestone Video
-### [Mid-Milestone Demo Video](https://drive.google.com/file/d/1-6Xj-muroU7beEQJVcwL4pkhoqrTk2gF/view?usp=sharing)
+### [Mid-Milestone Demo Video](https://drive.google.com/file/d/1-6Xj-muroU7beEQJVcwL4pkhoqrTk2gF/view?usp=sharing](https://drive.google.com/file/d/1IQh8rousjegxUH4RxNSGT4_O5xUwC_p3/view)
 
 ---
 ## AI Declaration
