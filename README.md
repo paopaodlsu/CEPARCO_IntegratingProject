@@ -20,9 +20,33 @@
 - Truncated large matrix displays to show values from the beginning and end of each matrix
 - Added input validation for each dimension and the restart choice
 
+## Program Output and Performance Results
+The following outputs demonstrate the current functionality of the program and show the performance differences between the implementations using different matrix sizes.
+
+### Small Matrix Test (2 × 3 and 3 × 4)
+AVX2 is slower than the sequential implementations when processing smaller matrices.
+
+<img width="588" height="682" alt="image" src="https://github.com/user-attachments/assets/291483c8-abf2-4c68-ae10-f451e4de40e9" />
+
+
+### Large Matrix Test (512 × 512)
+AVX2 performs faster than both sequential implementations when processing larger matrices.
+
+<img width="589" height="942" alt="image" src="https://github.com/user-attachments/assets/f53c6785-a8b8-4048-bd4b-f615a89ea4ad" />
+
+
 ## AHA moments
 - AVX2 is not necessarily faster for small matrices because setup and loop overhead can outweigh the benefit of processing eight values at once
 - Performance can change as matrix dimensions grow
+
+## Remaining Work for the Final Milestone
+- Conduct additional performance tests using different matrix dimensions
+- Complete the performance comparisons and speedup measurements
+- Further examine how matrix size and loop ordering affect execution time
+- Finalize the discussion of the results and document the implementation process
+
+## Mid-Milestone Video
+[insert link here]
 
 ## AI Declaration
 ChatGPT and Claude was used to with project development and debugging and to develop test cases.
@@ -166,6 +190,6 @@ The final project deliverables are as follows:
 [2] Netlib. (n.d.). BLAS (Basic Linear Algebra Subprograms). https://www.netlib.org/blas/
 
 # Pitch Video
-## [NEW Pitch Video](https://drive.google.com/file/d/1NxirzcALNeDLY3DhmaFLK_0ZPvq0-pyE/view?usp=sharing)
+[NEW Pitch Video](https://drive.google.com/file/d/1NxirzcALNeDLY3DhmaFLK_0ZPvq0-pyE/view?usp=sharing)
 
 [old Pitch Video](https://drive.google.com/file/d/1FepscfdHG1RATPm2HXv3Bl_DxYlRvLnH/view?usp=sharing)
