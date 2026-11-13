@@ -6,7 +6,7 @@
 - Tiu, Kyle 
 ---
 ## Things to keep in mind for the final milestone
-- With smaller matrix sizes (ex. input of 2, 3, 3, 4) The Sequential implementations run significantly faster than the AVX2 implementation, but larger matrix sizes (ex. input of 512, 512, 512, 512) The AVX2 runs significantly faster than the Sequential implementations.
+- DEPENDING ON THE COMPUTER, it was observed that withsmaller matrix sizes (ex. input of 2, 3, 3, 4) The Sequential implementations run significantly faster than the AVX2 implementation, but larger matrix sizes (ex. input of 512, 512, 512, 512) The AVX2 runs significantly faster than the Sequential implementations.
   
 ---
 ## Updates:
