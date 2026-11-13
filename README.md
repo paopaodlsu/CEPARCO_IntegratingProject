@@ -17,7 +17,7 @@
 
 ## Additions / Changes
 - Added a loop that lets users run another matrix multiplication or exit after each run
-- Truncated large matrix displays to show values from the beginning and end of each matrix
+- Modified the matrix display for larger inputs to show only the first and last few rows and columns
 - Added input validation for each dimension and the restart choice
 
 ## Program Output and Performance Results
@@ -34,7 +34,7 @@ AVX2 performs faster than both sequential implementations when processing larger
 
 <img width="589" height="942" alt="image" src="https://github.com/user-attachments/assets/f53c6785-a8b8-4048-bd4b-f615a89ea4ad" />
 
-
+---
 ## AHA moments
 - AVX2 is not necessarily faster for small matrices because setup and loop overhead can outweigh the benefit of processing eight values at once
 - Performance can change as matrix dimensions grow
@@ -49,7 +49,7 @@ AVX2 performs faster than both sequential implementations when processing larger
 [insert link here]
 
 ## AI Declaration
-ChatGPT and Claude was used to with project development and debugging and to develop test cases.
+ChatGPT and Claude were used to assist with project development, debugging, and the development of test cases.
 
 ***
 # CEPARCO Integrating Project milestone # 1 (proposal / revised proposal)
