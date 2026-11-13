@@ -29,7 +29,6 @@ ChatGPT and Claude was used to with project development and debugging and to dev
 
 ***
 # CEPARCO Integrating Project milestone # 1 (proposal / revised proposal)
----
 # Project Title: SIMD-BASED AVX2 MATRIX MULTIPLICATION **`PERFORMANCE`**
 
 # Abstract 
